@@ -2,15 +2,8 @@
 #include <stdlib.h>
 #include <limits.h>
 
-typedef struct {
-    int process_id;
-    int arrival_time;
-    int burst_time;
-    int remaining_time;
-    int waiting_time;
-    int turnaround_time;
-    int is_completed;
-} Process;
+#include "../include/process.h"
+
 
 int n; // Number of processes
 

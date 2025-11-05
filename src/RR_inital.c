@@ -1,15 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef struct {
-    int process_id;
-    int arrival_time;
-    int burst_time;
-    int remaining_time;
-    int waiting_time;
-    int turnaround_time;
-} Process;
-
+#include "../include/process.h"
 
 
 // Function to calculate waiting times and execution order for all processes
