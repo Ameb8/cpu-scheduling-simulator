@@ -8,9 +8,9 @@ typedef struct ProcessQueue;
 
 ProcessQueue* processQueueInit(size_t capacity); // Initializes empty queue of defined max capacity
 void processQueueFree(ProcessQueue* procQueue); // Deallocate process queue memory
-Process* processQueuePop(ProcessQueue* procQueue); // Add new process to queue
+Process* processQueuePop(ProcessQueue* procQueue); // Get next item from process queue
 Process* processQueuePeek(ProcessQueue* procQueue); // View next element in queue without removing
-char processQueuePush(ProcessQueue* procQueue, Process* process); // Get next item from process queue
+char processQueuePush(ProcessQueue* procQueue, Process* process); // Add new process to queue
 size_t processQueueSize(ProcessQueue* procQueue); // Retrieve number of elements in queue
 
 #endif
