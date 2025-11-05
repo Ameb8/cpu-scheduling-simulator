@@ -2,13 +2,19 @@
 #define PROCESS_H
 
 typedef struct {
-    int process_id;
-    int arrival_time;
-    int burst_time;
-    int remaining_time;
-    int waiting_time;
-    int turnaround_time;
-    int is_completed;
+    int processId;
+    int arrivalTime;
+    int burstTime;
+    int remainingTime;
+    int waitingTime;
+    int turnaroundTime;
+    int lastAck;
 } Process;
+
+void processSortArrival(Process processes[], int n);
+int processExec(Process* p, int time, int curTime);
+void processResumeExec(Process* p, int curTime);
+void processPrintScheduling(Process processes[], int n)
+
 
 #endif

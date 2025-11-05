@@ -108,7 +108,7 @@ void heapifyUp(ProcessQueue* procQueue) {
 
     while(
         idx > 0 && 
-        procQueue->processes[idx]->burst_time < procQueue->processes[PARENT(idx)]->burst_time
+        procQueue->processes[idx]->remainingTime < procQueue->processes[PARENT(idx)]->remainingTime
     ) {
         Process* temp = procQueue->processes[idx];
         procQueue->processes[idx] = procQueue->processes[PARENT(idx)];
@@ -128,12 +128,12 @@ void heapifyDown(ProcessQueue* procQueue) {
         size_t smallest = idx;
 
         if (left < procQueue->size && // Check if left child has shortest burst
-            procQueue->processes[left]->burst_time < procQueue->processes[smallest]->burst_time) {
+            procQueue->processes[left]->remainingTime < procQueue->processes[smallest]->remainingTime) {
             smallest = left;
         }
 
         if (right < procQueue->size && // Check if right child has shortest burst
-            procQueue->processes[right]->burst_time < procQueue->processes[smallest]->burst_time) {
+            procQueue->processes[right]->remainingTime < procQueue->processes[smallest]->remainingTime) {
             smallest = right;
         }
 

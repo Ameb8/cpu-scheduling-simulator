@@ -3,6 +3,10 @@
 #include <limits.h>
 
 #include "../include/process.h"
+#include "../include/process_queue.h"
+
+
+# define TIME_STEP
 
 
 int n; // Number of processes
@@ -13,13 +17,48 @@ int findNextProcess(Process proc[], int current_time) {
 }
 
 // Function to perform the SRTF scheduling
-void srtf(Process proc[]) {
-   
+// Assumes proc is ordered by arrival time
+void srtf(Process procs[], int numProcs) {
+    int time = 0;
+    Process* currentExec = NULL; // Currently executing process
+    ProcessQueue* readyQueue = proccessQueueInit(numProcs); // Queue of executing processes
+    int nextProc = 0; // Next process to arrive
+    
+    // Loop until no process execution or queued CPU bursts
+    while(currentExec || procQueueSize(procQueue)) {
+        if(currentExec) // Update currently executing process
+            processExec(currentExec, TIME_STEP, time);
+        
+        if(currentExec && currentExec->remainingTime == 0) // Process completed execution
+            currentExec = NULL;
+
+        // Set next executing process 
+        if(!currentExec && processQueueSize(readyQueue) > 0) {
+            currentExec = processQueuePop(readyQueue);
+            processResumeExec(currentExec, time);
+        }
+
+        // Handle arriving processes
+        while(nextProc < numProcs && procs[nextProc]->arrivalTime == time) {
+            // Replace current executing process with new arrival
+            if(procs[nextProc]->burstTime < currentExec->remainingTime) {
+                proccessQueuePush(readyQueue, currentExec); // Move currently executing process to ready queue
+                currentExec = &procs[nextProc]; // Update currently executing process
+            } else { // Add new process to ready queue
+                processQueuePush(readyQueue, &procs[nextProc++]);
+            }
+
+            nextProc++; // Move index to next arriving process
+        }
+
+        time += TIME_STEP; // Increment time
+    }
 }
 
 // Function to print the processes and their details
 void printProcesses(Process proc[]) {
     printf("Process ID\tArrival Time\tBurst Time\tWaiting Time\tTurnaround Time\n");
+
     for (int i = 0; i < n; i++) {
         printf("%d\t\t%d\t\t%d\t\t%d\t\t%d\n",
                proc[i].process_id, proc[i].arrival_time, proc[i].burst_time,
