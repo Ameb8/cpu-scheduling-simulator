@@ -10,11 +10,58 @@
 #define RIGHT_CHILD(i) (2 * i + 2)
 
 
-typedef struct {
+struct ProcessQueue{
     Process** processes; // Heap to store processes
     size_t capacity; // Maximum heap capacity
     size_t size; // Number of elements in heap
-} ProcessQueue;
+};
+
+
+void heapifyUp(ProcessQueue* procQueue) {
+    size_t idx = procQueue->size - 1;
+
+    while(
+        idx > 0 && 
+        procQueue->processes[idx]->remainingTime < procQueue->processes[PARENT(idx)]->remainingTime
+    ) {
+        Process* temp = procQueue->processes[idx];
+        procQueue->processes[idx] = procQueue->processes[PARENT(idx)];
+        procQueue->processes[PARENT(idx)] = temp;
+
+        idx = PARENT(idx);
+    }
+}
+
+
+void heapifyDown(ProcessQueue* procQueue) {
+    size_t idx = 0;
+
+    while (1) {
+        size_t left = LEFT_CHILD(idx);
+        size_t right = RIGHT_CHILD(idx);
+        size_t smallest = idx;
+
+        if (left < procQueue->size && // Check if left child has shortest burst
+            procQueue->processes[left]->remainingTime < procQueue->processes[smallest]->remainingTime) {
+            smallest = left;
+        }
+
+        if (right < procQueue->size && // Check if right child has shortest burst
+            procQueue->processes[right]->remainingTime < procQueue->processes[smallest]->remainingTime) {
+            smallest = right;
+        }
+
+        if (smallest != idx) { // Swap elements
+            Process* temp = procQueue->processes[idx];
+            procQueue->processes[idx] = procQueue->processes[smallest];
+            procQueue->processes[smallest] = temp;
+
+            idx = smallest; // Move down heap
+        } else { // Heap property restored
+            break;
+        }
+    }
+}
 
 
 ProcessQueue* processQueueInit(size_t capacity) {
@@ -103,48 +150,3 @@ size_t processQueueSize(ProcessQueue* procQueue) {
 }
 
 
-void heapifyUp(ProcessQueue* procQueue) {
-    size_t idx = procQueue->size - 1;
-
-    while(
-        idx > 0 && 
-        procQueue->processes[idx]->remainingTime < procQueue->processes[PARENT(idx)]->remainingTime
-    ) {
-        Process* temp = procQueue->processes[idx];
-        procQueue->processes[idx] = procQueue->processes[PARENT(idx)];
-        procQueue->processes[PARENT(idx)] = temp;
-
-        idx = PARENT(idx);
-    }
-}
-
-
-void heapifyDown(ProcessQueue* procQueue) {
-    size_t idx = 0;
-
-    while (1) {
-        size_t left = LEFT_CHILD(idx);
-        size_t right = RIGHT_CHILD(idx);
-        size_t smallest = idx;
-
-        if (left < procQueue->size && // Check if left child has shortest burst
-            procQueue->processes[left]->remainingTime < procQueue->processes[smallest]->remainingTime) {
-            smallest = left;
-        }
-
-        if (right < procQueue->size && // Check if right child has shortest burst
-            procQueue->processes[right]->remainingTime < procQueue->processes[smallest]->remainingTime) {
-            smallest = right;
-        }
-
-        if (smallest != idx) { // Swap elements
-            Process* temp = procQueue->processes[idx];
-            procQueue->processes[idx] = procQueue->processes[smallest];
-            procQueue->processes[smallest] = temp;
-
-            idx = smallest; // Move down heap
-        } else { // Heap property restored
-            break;
-        }
-    }
-}

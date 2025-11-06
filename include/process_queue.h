@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include "process.h"
 
-typedef struct ProcessQueue;
+typedef struct ProcessQueue ProcessQueue;
 
 ProcessQueue* processQueueInit(size_t capacity); // Initializes empty queue of defined max capacity
 void processQueueFree(ProcessQueue* procQueue); // Deallocate process queue memory

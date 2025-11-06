@@ -4,14 +4,12 @@
 #include "../include/process.h"
 
 
-int cmpProcessArrival(const void* a, const void* b) {
-    const Process* procA = (Process*)a;
-    const Process* procB = (Process*)b;
-
-    return procA->arrivalTime - procB->arrivalTime; // ascending order
-}
+#define PROC_SCHED_LBL "\nProcess Scheduling Simulation Results:\n\n"
 
 
+static int processCount = 0;
+
+/*
 typedef struct {
     int processId;
     int arrivalTime;
@@ -20,7 +18,28 @@ typedef struct {
     int waitingTime;
     int turnaroundTime;
     int lastAck;
-} Process;
+} Process; */
+
+
+Process processInit(int arrivalTime, int burstTime) {
+    return (Process) {
+        processCount++, 
+        arrivalTime, 
+        burstTime, 
+        arrivalTime, 
+        0, 
+        0, 
+        0
+    };
+}
+
+
+int cmpProcessArrival(const void* a, const void* b) {
+    const Process* procA = (Process*)a;
+    const Process* procB = (Process*)b;
+
+    return procA->arrivalTime - procB->arrivalTime; // ascending order
+}
 
 
 int processExec(Process* p, int time, int curTime) {
@@ -46,7 +65,11 @@ void processSortArrival(Process processes[], int n) {
     qsort(processes, n, sizeof(Process), cmpProcessArrival);
 }
 
-
+/*
 void processOutputScheduling(Process processes[], int n) {
-    
-}
+    printf(PROC_SCHED_LBL);
+
+    for(int i = 0; i < n; i++) {
+
+    }
+}*/

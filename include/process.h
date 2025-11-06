@@ -11,10 +11,11 @@ typedef struct {
     int lastAck;
 } Process;
 
+Process processInit(int arrivalTime, int burstTime);
 void processSortArrival(Process processes[], int n);
 int processExec(Process* p, int time, int curTime);
 void processResumeExec(Process* p, int curTime);
-void processPrintScheduling(Process processes[], int n)
+//void processPrintScheduling(Process processes[], int n)
 
 
 #endif
