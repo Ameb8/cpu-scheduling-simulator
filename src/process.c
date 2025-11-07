@@ -26,8 +26,8 @@ Process processInit(int arrivalTime, int burstTime) {
         processCount++, 
         arrivalTime, 
         burstTime, 
-        arrivalTime, 
-        0, 
+        burstTime,
+        0,
         0, 
         0
     };
@@ -55,6 +55,11 @@ int processExec(Process* p, int time, int curTime) {
     return execTime;
 }
 
+void processWait(Process* p) {
+    p->waitingTime++;
+    p->turnaroundTime++;
+}
+
 void processResumeExec(Process* p, int curTime) {
     p->waitingTime += curTime - p->lastAck;
     p->turnaroundTime += curTime - p->lastAck;
@@ -65,11 +70,18 @@ void processSortArrival(Process processes[], int n) {
     qsort(processes, n, sizeof(Process), cmpProcessArrival);
 }
 
-/*
-void processOutputScheduling(Process processes[], int n) {
-    printf(PROC_SCHED_LBL);
+void processPrint(const Process *p) {
+    if (p == NULL) return;
 
-    for(int i = 0; i < n; i++) {
-
-    }
-}*/
+    printf("+------------+--------------+------------+----------------+--------------+-----------------+\n");
+    printf("| Process ID | Arrival Time | Burst Time | Remaining Time | Waiting Time | Turnaround Time |\n");
+    printf("+------------+--------------+------------+----------------+--------------+-----------------+\n");
+    printf("| %10d | %12d | %10d | %14d | %12d | %15d |\n",
+           p->processId,
+           p->arrivalTime,
+           p->burstTime,
+           p->remainingTime,
+           p->waitingTime,
+           p->turnaroundTime);
+    printf("+------------+--------------+------------+----------------+--------------+-----------------+\n");
+}

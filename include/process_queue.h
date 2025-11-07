@@ -12,5 +12,6 @@ Process* processQueuePop(ProcessQueue* procQueue); // Get next item from process
 Process* processQueuePeek(ProcessQueue* procQueue); // View next element in queue without removing
 char processQueuePush(ProcessQueue* procQueue, Process* process); // Add new process to queue
 size_t processQueueSize(ProcessQueue* procQueue); // Retrieve number of elements in queue
+void processQueueMap(ProcessQueue* procQueue, void (*f)(Process*)); // Apply function to each element queue
 
 #endif

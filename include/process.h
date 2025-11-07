@@ -14,8 +14,9 @@ typedef struct {
 Process processInit(int arrivalTime, int burstTime);
 void processSortArrival(Process processes[], int n);
 int processExec(Process* p, int time, int curTime);
+void processWait(Process* p);
 void processResumeExec(Process* p, int curTime);
-//void processPrintScheduling(Process processes[], int n)
+void processPrint(const Process* p);
 
 
 #endif

@@ -149,4 +149,13 @@ size_t processQueueSize(ProcessQueue* procQueue) {
     return procQueue->size;
 }
 
+void processQueueMap(ProcessQueue* procQueue, void (*f)(Process*)) {
+    if(!procQueue || procQueue->size < 1 || !f) // Ensure valid inputs
+        return;
+
+    // Apply function f to each Process in queue
+    for(int i = 0; i < procQueue->size; i++)
+        f(procQueue->processes[i]);
+}
+
 
