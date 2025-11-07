@@ -1,9 +1,11 @@
-/*
+
 #include <stdio.h>
 #include <stdlib.h>
 
 #include "../include/process.h"
+#include "../include/process_ring.h"
 
+/*
 
 // Function to calculate waiting times and execution order for all processes
 void calculateWaitingTimeAndExecutionOrder(Process proc[], int n, int quantum) {
@@ -22,9 +24,7 @@ void roundRobin(Process proc[], int numProcs, int quantum) {
     int time = 0;
     int numWaitingWaiting = 0;
 
-    for(int i = 0; i < numProcs; i++) {
-    
-    }
+    ProcessRing* readyQueue = processRingInit();
 }
 
 

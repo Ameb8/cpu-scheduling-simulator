@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "process.h": "c",
-        "__locale": "c"
+        "__locale": "c",
+        "process_ring.h": "c"
     }
 }
