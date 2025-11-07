@@ -38,24 +38,20 @@ void srtfSimulate(Process procs[], int numProcs) {
         // Update wait and turnaround time for processes in ready queue:
         processQueueMap(readyQueue, processWait);
 
-        if(currentExec) { // Update currently executing process 
-            //printf("\nCurrent Executing Process Present\n"); // DEBUG *******
-            printf("\nProcess [%d] Executing\n", currentExec->processId);
+        if(currentExec) // Update currently executing process 
             processExec(currentExec, TIME_STEP, time);
-        }
 
         if(currentExec && currentExec->remainingTime == 0) // Process completed execution
             currentExec = NULL;
 
         if(nextProc < numProcs && procs[nextProc].arrivalTime == time) {
-            printf("+------------------------------------------------------------------------------------+\n");
-            printf("| Arriving Processes:                                                                |\n");
-            processPrintHeader("\t");
+            printf(ARRIVE_HEADER);
+            processPrintHeader(LINE_START "\t");
         }
 
         // Handle arriving processes
         while(nextProc < numProcs && procs[nextProc].arrivalTime == time) {
-            processPrintBody(&procs[nextProc], "\t");
+            processPrintBody(&procs[nextProc], (LINE_START "\t"));
             processQueuePush(readyQueue, &procs[nextProc++]);
         }
 

@@ -15,12 +15,20 @@ void calculateWaitingTimeAndExecutionOrder(Process proc[], int n, int quantum) {
 void calculateTurnaroundTime(Process proc[], int n) {
    // Your code
 }
+*/
 
-void roundRobin(Process proc[], int n, int quantum) {
-    calculateWaitingTimeAndExecutionOrder(proc, n, quantum);
-    calculateTurnaroundTime(proc, n);
+
+void roundRobin(Process proc[], int numProcs, int quantum) {
+    int time = 0;
+    int numWaitingWaiting = 0;
+
+    for(int i = 0; i < numProcs; i++) {
+    
+    }
 }
 
+
+/*
 void printProcesses(Process proc[], int n) {
     printf("Process ID\tArrival Time\tBurst Time\tWaiting Time\tTurnaround Time\n");
     for (int i = 0; i < n; i++) {
@@ -29,6 +37,7 @@ void printProcesses(Process proc[], int n) {
                proc[i].waiting_time, proc[i].turnaround_time);
     }
 }
+
 
 int main() {
     Process proc[] = {{1, 0, 24}, {2, 0, 3}, {3, 0, 3}};

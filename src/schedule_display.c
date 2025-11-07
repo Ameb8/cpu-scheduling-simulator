@@ -38,8 +38,8 @@ void processPrint(const Process* p, const char* linePrefix) {
 }
 
 void execProcessPrint(const Process* p) {
-    printf("\n" LINE_START "\n" LINE_START "\t" SHORT_SEPARATOR "\n" LINE_START "\t" "|\t" ASC_BOLD "Currently Executing Process \t\t\t\t\t\t\t   |\n");
+    printf(EXEC_HEADER);
     processPrint(p, (LINE_START "\t"));
-    printf("\n" LINE_START "\n" LINE_START);
+    printf(LINE_START "\n" LINE_START "\n" LINE_START);
 }
 

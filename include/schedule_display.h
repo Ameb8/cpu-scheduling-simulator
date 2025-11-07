@@ -11,6 +11,9 @@
 #define ASC_RED_FG "\x1b[31m"
 #define ASC_BLUE_FG "\x1b[34m"
 #define ASC_GREEN_FG "\x1b[32m"
+#define ASC_MAGENTA_FG  "\x1b[35m"
+#define ASC_CYAN_FG     "\x1b[36m"
+#define ASC_YELLOW_FG   "\x1b[33m"
 
 #define LINE_START ASC_BLUE_FG "|" ASC_RESET
 
@@ -18,11 +21,10 @@
 #define SEPARATOR "+-------------------------------------------------------------------------+"
 #define SHORT_SEPARATOR "+------------------------------------------------------------------------------------------+"
 
-#define TIME_HEADER LINE_START "\n" TIME_SEPARATOR "\n" LINE_START "\t" ASC_BOLD ASC_GREEN_FG "Time:\t%d\t\t\t\t\t\t\t\t\t\t\t\t\t\t" ASC_RESET LINE_START "\n" TIME_SEPARATOR ASC_RESET "\n" LINE_START
-#define READY_QUEUE_HEADER "\n" LINE_START "\t" SHORT_SEPARATOR "\n" LINE_START "\t|\t" ASC_BOLD "Processes in Ready Queue:\t\t\t\t\t\t\t   " ASC_RESET "|\n"
-
-//(LINE_START ASC_GREEN_FG ASC_BOLD "\tProcesses in Ready Queue:\t\t\t\t\t" ASC_RESET "|\n\n")
-
+#define TIME_HEADER LINE_START "\n" TIME_SEPARATOR "\n" LINE_START "\t\t" ASC_BOLD ASC_GREEN_FG "Time:\t%d\t\t\t\t\t\t\t\t\t\t\t\t\t" ASC_RESET LINE_START "\n" TIME_SEPARATOR ASC_RESET "\n" LINE_START
+#define EXEC_HEADER "\n" LINE_START "\n" LINE_START "\t" SHORT_SEPARATOR "\n" LINE_START "\t" "|\t" ASC_BOLD ASC_YELLOW_FG "Currently Executing Process \t\t\t\t\t\t\t   " ASC_RESET "|\n"
+#define ARRIVE_HEADER LINE_START "\n" LINE_START "\t" SHORT_SEPARATOR "\n" LINE_START "\t|\t" ASC_BOLD ASC_CYAN_FG "Arriving Processes\t\t\t\t\t\t\t\t   " ASC_RESET "|\n"
+#define READY_QUEUE_HEADER "\n" LINE_START "\t" SHORT_SEPARATOR "\n" LINE_START "\t|\t" ASC_BOLD ASC_MAGENTA_FG "Processes in Ready Queue\t\t\t\t\t\t\t   " ASC_RESET "|\n"
 
 
 void processPrintHeader(const char* linePrefix);
@@ -31,5 +33,4 @@ void processPrint(const Process *p, const char* linePrefix);
 void execProcessPrint(const Process* p);
 
  
-
 #endif
