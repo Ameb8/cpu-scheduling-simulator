@@ -16,7 +16,7 @@ void processSortArrival(Process processes[], int n);
 int processExec(Process* p, int time, int curTime);
 void processWait(Process* p);
 void processResumeExec(Process* p, int curTime);
-void processPrint(const Process* p);
+
 
 
 #endif

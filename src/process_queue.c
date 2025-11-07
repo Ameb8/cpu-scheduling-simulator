@@ -153,9 +153,26 @@ void processQueueMap(ProcessQueue* procQueue, void (*f)(Process*)) {
     if(!procQueue || procQueue->size < 1 || !f) // Ensure valid inputs
         return;
 
-    // Apply function f to each Process in queue
     for(int i = 0; i < procQueue->size; i++)
         f(procQueue->processes[i]);
+    
+    /*
+    // Temporary storage for mapping f to Processes
+    Process** tempQueue = malloc(procQueue->size * sizeof(Process*));
+
+    // Apply function f to each Process in queue
+    for(int i = 0; i < procQueue->size; i++) {
+        // Remove so function applied in priority order
+        tempQueue[i] = processQueuePop(procQueue);
+        f(tempQueue[i]);
+    }
+
+    // Recreate priority queue
+    for(int i = 0; i < procQueue->size; i++)
+        processQueuePush(procQueue, tempQueue[i]);
+
+    free(tempQueue); // Deallocate memory for temp array
+    */
 }
 
 

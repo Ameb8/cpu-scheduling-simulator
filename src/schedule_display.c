@@ -1,10 +1,45 @@
 #include <stdio.h>
 
 #include "../include/fmt.h"
-#include "../include/process.h"
+#include "../include/schedule_display.h"
 
-#define SEPARATOR "-----------------------------------------------"
 
-void printTimeHeader(int time) {
-    printf("\n" SEPARATOR "\n\tTime:\t%d", time);
+#define PROC_TABLE_DIV "+------------+--------------+------------+----------------+--------------+-----------------+"
+
+
+void processPrintHeader(const char* linePrefix) {
+    printf("%s" PROC_TABLE_DIV "\n", linePrefix);
+    printf("%s| Process ID | Arrival Time | Burst Time | Remaining Time | Waiting Time | Turnaround Time |\n", linePrefix);
+    printf("%s" PROC_TABLE_DIV "\n", linePrefix);
 }
+
+
+void processPrintBody(const Process* p, const char* linePrefix) {
+    printf(
+        "%s| %10d | %12d | %10d | %14d | %12d | %15d |\n",
+        linePrefix,
+        p->processId,
+        p->arrivalTime,
+        p->burstTime,
+        p->remainingTime,
+        p->waitingTime,
+        p->turnaroundTime
+    );
+
+    printf("%s" PROC_TABLE_DIV "\n", linePrefix);
+}
+
+
+void processPrint(const Process* p, const char* linePrefix) {
+    if (p == NULL) return;
+
+    processPrintHeader(linePrefix);
+    processPrintBody(p, linePrefix);
+}
+
+void execProcessPrint(const Process* p) {
+    printf("\n" LINE_START "\n" LINE_START "\t" SHORT_SEPARATOR "\n" LINE_START "\t" "|\t" ASC_BOLD "Currently Executing Process \t\t\t\t\t\t\t   |\n");
+    processPrint(p, (LINE_START "\t"));
+    printf("\n" LINE_START "\n" LINE_START);
+}
+
