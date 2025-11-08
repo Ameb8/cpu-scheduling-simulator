@@ -22,9 +22,35 @@ void calculateTurnaroundTime(Process proc[], int n) {
 
 void roundRobin(Process proc[], int numProcs, int quantum) {
     int time = 0;
-    int numWaitingWaiting = 0;
+    int procIdx = 0;
 
     ProcessRing* readyQueue = processRingInit();
+    Process* currentExec = NULL;
+
+    while(procIdx < numProcs || processRingSize(readyQueue) == 0) {
+        if(currentExec) { // Update executed process
+            processExec(currentExec, 1, time);
+
+            if(currentExec->time == 0) {
+                currentExec = NULL;
+                
+            }
+        }
+
+        // Increment process waiting time
+        processRingMap(readyQueue, processWait); 
+    
+        // Add arriving process to ready queue
+        while(procIdx < numProcs && proc[procIdx].arrivalTime == time)
+            processRingInsert(readyQueue, &proc[procIdx++]);
+
+        // Update current process if end of time quantum reached
+        if(time % quantum == 0) 
+            currentExec = processRingNext(readyQueue);
+
+        time++; // Move time forward
+    }
+
 }
 
 

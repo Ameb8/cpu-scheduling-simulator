@@ -112,3 +112,8 @@ size_t processRingSize(ProcessRing* procRing) {
     
     return 0;
 }
+
+
+void processRingMap(ProcessRing* procRing, void (f)(Process*)) {
+    
+}

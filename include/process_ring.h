@@ -14,6 +14,7 @@ Process* processRingPoll(ProcessRing* procRing);
 char processRingInsert(ProcessRing* procRing, Process* p);
 Process* processRingNext(ProcessRing* procRing);
 size_t processRingSize(ProcessRing* procRing);
+void processRingMap(ProcessRing* procRing, void (f)(Process*));
 
 
 #endif
