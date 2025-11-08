@@ -2,6 +2,7 @@
     "files.associations": {
         "process.h": "c",
         "__locale": "c",
-        "process_ring.h": "c"
+        "process_ring.h": "c",
+        "sjf_sim.h": "c"
     }
 }

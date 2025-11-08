@@ -2,9 +2,9 @@
 #include <stdlib.h>
 #include <limits.h>
 
-#include "../include/process.h"
 #include "../include/process_queue.h"
 #include "../include/schedule_display.h"
+#include "../include/sjf_sim.h"
 
 
 #define TIME_STEP 1
@@ -17,7 +17,10 @@ void processPrintBodyTab(Process* p) {
 }
 
 
-void srtfSimulate(Process procs[], int numProcs) {
+void sjfSimulate(Process procs[], int numProcs) {
+    // Ensure process array is sorted by arrival time
+    processSortArrival(procs, numProcs);
+
     int time = 0;
     Process* currentExec = NULL; // Currently executing process
     ProcessQueue* readyQueue = processQueueInit(numProcs); // Queue of executing processes
@@ -61,29 +64,6 @@ void srtfSimulate(Process procs[], int numProcs) {
 
         time += TIME_STEP; // Increment time
     }
-
-
 }
 
 
-int main() {
-    // Initialize processes with their IDs, arrival times, and burst times
-    int initProcVals[NUM_PROCS][2] = {{0, 8}, {1, 4}, {2, 9}, {3, 5}}; 
-
-    Process processes[NUM_PROCS];
-    
-    for(int i = 0; i < NUM_PROCS; i++) {
-        processes[i] = processInit(initProcVals[i][0], initProcVals[i][1]);
-    }
-
-    srtfSimulate(processes, NUM_PROCS);
-
-    printf(PROC_RES_LBL);
-
-    //for(int i = 0; i < NUM_PROCS; i++)
-        //processPrint(&processes[i]);
-
-    //printProcesses(processes, NUM_PROCS);
-
-    return 0;
-}

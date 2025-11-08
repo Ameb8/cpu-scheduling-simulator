@@ -22,8 +22,13 @@ struct ProcessDequeue {
 
 QueueNode* QueueNodeInit(Process* p) {
     QueueNode* node = malloc(sizeof(QueueNode)); // Allocate memory
-    node->next = NULL; // Initialize next pointer ot null
-    node->process = p; // Initialize process field
+
+    if(node) {
+        node->next = NULL; // Initialize next pointer ot null
+        node->process = p; // Initialize process field
+    }
+
+    return node;
 }
 
 
@@ -37,10 +42,10 @@ void processDequeueFree(ProcessDequeue* procQueue) {
     if(!procQueue) // Validate input
         return;
 
-    while(procQueue->head) { // Free Nodes in queue
-        procQueue->tail = procQueue->head;
-        free(procQueue->head);
-        procQueue->head = procQueue->tail;
+    while (procQueue->head) {
+        QueueNode* tmp = procQueue->head;
+        procQueue->head = procQueue->head->next;
+        free(tmp);
     }
 
     free(procQueue); // Free Queue
@@ -75,17 +80,16 @@ Process* processDequeuePoll(ProcessDequeue* procQueue) {
     if(!procQueue || !procQueue->head) // Empty or null ring
         return NULL;
 
-    Process* headProc = procQueue->head->process; // Process to return
-    procQueue->size -= 1; // Decrement dequeue size
+    QueueNode* oldHead = procQueue->head;
+    Process* headProc = oldHead->process; // Process to return
 
-    if(procQueue->size == 1) { // Remove only element
-        procQueue->head = NULL;
+    procQueue->head = oldHead->next; // Update list head
+
+    if(!procQueue->head) // Dequeue now empty
         procQueue->tail = NULL;
-    } else { // Remove leading process
-        QueueNode* newHead = procQueue->head->next;
-        free(procQueue->head);
-        procQueue->head = newHead;
-    }
+
+    free(oldHead); // Free removed node
+    procQueue->size -= 1; // Decrement size
 
     return headProc;
 }

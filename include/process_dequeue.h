@@ -9,11 +9,11 @@ typedef struct ProcessDequeue ProcessDequeue;
 
 ProcessDequeue* processDequeueInit();
 void processDequeueFree(ProcessDequeue* procQueue);
-Process* processDequeuePeek(ProcessDequeue* procQueue);
 Process* processDequeuePoll(ProcessDequeue* procQueue);
-char processDequeueInsert(ProcessDequeue* procQueue, Process* p);
+Process* processDequeuePeek(ProcessDequeue* procQueue);
+char processDequeueAppend(ProcessDequeue* procQueue, Process* p);
 size_t processDequeueSize(ProcessDequeue* procQueue);
 void processDequeueMap(ProcessDequeue* procQueue, void (f)(Process*));
  
 
-#endif
+#endif 
