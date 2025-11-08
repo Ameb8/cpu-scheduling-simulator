@@ -3,7 +3,7 @@
 #include <stdlib.h>
 
 #include "../include/process.h"
-#include "../include/process_ring.h"
+#include "../include/process_dequeue.h"
 
 /*
 
@@ -21,33 +21,32 @@ void calculateTurnaroundTime(Process proc[], int n) {
 
 
 void roundRobin(Process proc[], int numProcs, int quantum) {
-    int time = 0;
-    int procIdx = 0;
+    int time = 0; // Tracks time from epoch
+    int timeQ = 0; // Tracks time from process switch synced with quantum
+    int procIdx = 0; // Index of next arriving process
 
-    ProcessRing* readyQueue = processRingInit();
-    Process* currentExec = NULL;
+    ProcessDequeue* readyQueue = processDequeueInit(); // Queue of ready processes
+    Process* currentExec = NULL; // Currently executing process
 
-    while(procIdx < numProcs || processRingSize(readyQueue) == 0) {
-        if(currentExec) { // Update executed process
-            processExec(currentExec, 1, time);
+    // Loop by 1 time unit until all process complete execution
+    while(procIdx < numProcs || processDequeueSize(readyQueue) == 0) {
+        // Append arriving processes to queue
+        while(procIdx < numProcs && proc[procIdx].arrivalTime == time)
+            processDequeueAppend(readyQueue, &proc[procIdx++]);
 
-            if(currentExec->time == 0) {
-                currentExec = NULL;
-                
-            }
+        if(currentExec) { // Update current executing process if necessary
+            if(timeQ % quantum == quantum - 1) // End of quantum reached
+                processDequeueAppend(readyQueue, currentExec); // Add process to end of dequeue
+            else if(currentExec->process->remainingTime == 0) // Process finished executing
+                timeQ = 0; // Update time quantum count           
+
+            currentExec = processDequeuePoll(readyQueue); // Update executing process
         }
 
-        // Increment process waiting time
-        processRingMap(readyQueue, processWait); 
+        // Update process metrics
+        if(currentExec) processExec(currentExec, 1, time);
+        processDequeueMap(readyQueue, processWait);
     
-        // Add arriving process to ready queue
-        while(procIdx < numProcs && proc[procIdx].arrivalTime == time)
-            processRingInsert(readyQueue, &proc[procIdx++]);
-
-        // Update current process if end of time quantum reached
-        if(time % quantum == 0) 
-            currentExec = processRingNext(readyQueue);
-
         time++; // Move time forward
     }
 
