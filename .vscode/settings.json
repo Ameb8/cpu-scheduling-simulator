@@ -3,6 +3,7 @@
         "process.h": "c",
         "__locale": "c",
         "process_ring.h": "c",
-        "sjf_sim.h": "c"
+        "sjf_sim.h": "c",
+        "schedule_display.h": "c"
     }
 }
