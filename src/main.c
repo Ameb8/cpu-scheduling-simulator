@@ -23,12 +23,6 @@ int main() {
         processes[i] = processInit(initProcVals[i][0], initProcVals[i][1]);
     }
 
-    /*  
-    int* time = 0;
-    rrSimulate(processes, NUM_PROCS, 8, &time);
-    printf("\n\n\n\nTotal Time: %d", *time);
-    */
-
     const int rrQuantums[] = QUANTUMS;
 
     Process*** results = malloc(NUM_SIMS * sizeof(Process**));
@@ -43,6 +37,7 @@ int main() {
         results[i] = rrSimulate(procsCopy, NUM_PROCS, rrQuantums[i], &resultSizes[i]);
         printf("\n\n\n\n\n BMark w/ QUANTUM = %d completed\n", rrQuantums[i]);
     }
+
     execProcessTable(results, resultSizes, NUM_QUANTUMS); // Display results
 
     // Free results memory
