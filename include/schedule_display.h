@@ -39,6 +39,6 @@ void processPrintHeader(const char* linePrefix);
 void processPrintBody(const Process* p, const char* linePrefix);
 void processPrint(const Process *p, const char* linePrefix);
 void execProcessPrint(const Process* p);
-
+void execProcessTable(Process*** procs, int* completionTimes, int numProcs);
  
 #endif

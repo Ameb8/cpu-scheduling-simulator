@@ -52,7 +52,6 @@ void execProcessPrint(const Process* p) {
 
 
 void execProcessTable(Process*** procs, int* completionTimes, int numProcs) {
-    BOOL* isFinished = calloc(numProcs, sizeof(BOOL));
     size_t numFinished = 0;
     int time = 0;
     
@@ -71,12 +70,12 @@ void execProcessTable(Process*** procs, int* completionTimes, int numProcs) {
                     process = procs[i][time]->processId; // Get running process ID
 
                     switch (process % PROC_COLORS) { // Assign cell color
-                        case 1: color = ASC_RED_BG; break;
+                        case 0: color = ASC_CYAN_BG; break;
+                        case 1: color = ASC_BLUE_BG; break;
                         case 2: color = ASC_GREEN_BG; break;
-                        case 3: color = ASC_YELLOW_BG; break;
-                        case 4: color = ASC_BLUE_BG; break;
-                        case 5: color = ASC_MAGENTA_BG; break;
-                        case 6: color = ASC_CYAN_BG; break;
+                        case 3: color = ASC_MAGENTA_BG; break;
+                        case 4: color = ASC_RED_BG; break;
+                        case 5: color = ASC_YELLOW_BG; break;
                         default: color = ASC_RESET; break;
                     }
                 }

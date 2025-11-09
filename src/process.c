@@ -71,3 +71,16 @@ void processSortArrival(Process processes[], int n) {
 }
 
 
+void growProcessArr(Process*** procs, int size, int newSize) {
+    if(!procs || newSize < size || newSize < 0)
+        return;
+
+    Process** newProcs = calloc(newSize, sizeof(Process*)); // Allocate enlarged array
+
+    if(newProcs) { // Recreate array
+        for(int i = 0; i < size; i++) // Transfer values
+            newProcs[i] = *procs[i];
+
+        free(*procs); // Deallocate old array
+    }
+}
