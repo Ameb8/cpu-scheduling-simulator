@@ -50,55 +50,63 @@ void execProcessPrint(const Process* p) {
     printf(LINE_START "\n" LINE_START "\n" LINE_START);
 }
 
-/*
-void execProcessTable(Process*** procs, int* completionTimes, int numProcs) {
-    size_t numFinished = 0;
-    int time = 0;
+
+static inline char* cellColor(int processId) {
+    switch (processId % PROC_COLORS) {
+        case 0: return ASC_CYAN_BG; break;
+        case 1: return ASC_BLUE_BG; break;
+        case 2: return ASC_GREEN_BG; break;
+        case 3: return ASC_MAGENTA_BG; break;
+        case 4: return ASC_RED_BG; break;
+        case 5: return ASC_YELLOW_BG; break;
+        default: return ASC_RESET; break;
+    }
+}
+
+
+BOOL calculateMetrics(Process* procs, int numProcs, double* avgWait, double* avgTurnaround) {
+    // Validate inputs
+    if(!procs || !avgWait || !avgTurnaround || numProcs < 1)
+        return FALSE;
     
-    printf("\n");
-    printf("+--------------------------------+\n");
+    // Initialize metrics to zero
+    *avgWait = 0;
+    *avgTurnaround = 0;
 
-    while(numFinished < numProcs) {
-        printf("|%d|", time + 1);
-
-        for(int i = 0; i < numProcs; i++) {
-            char *color = ASC_RESET;
-            int process = INT_MIN;
-
-            if(time < completionTimes[i]) { // 
-                if(procs[i][time]) { // Assign color  and value to process
-                    process = procs[i][time]->processId; // Get running process ID
-
-                    switch (process % PROC_COLORS) { // Assign cell color
-                        case 0: color = ASC_CYAN_BG; break;
-                        case 1: color = ASC_BLUE_BG; break;
-                        case 2: color = ASC_GREEN_BG; break;
-                        case 3: color = ASC_MAGENTA_BG; break;
-                        case 4: color = ASC_RED_BG; break;
-                        case 5: color = ASC_YELLOW_BG; break;
-                        default: color = ASC_RESET; break;
-                    }
-                }
-            } else if(time == completionTimes[i]) { // Process finished
-                numFinished++;
-            }
-            
-            if(process != INT_MIN) // Display running process
-                printf("%s%s %d %s|", ASC_BOLD, color, process, ASC_RESET);
-            else // Display empty cell
-                printf("%s%s   %s|", ASC_BOLD, color, ASC_RESET);
-
-            
-        }
-
-        // Advance time unit
-        printf("\n+--------------------------------+\n");
-        time++;
+    // Sum wait and turnaround times for all processes
+    for(int i = 0; i < numProcs; i++) {
+        *avgWait += procs[i].waitingTime;
+        *avgTurnaround += procs[i].turnaroundTime;
     }
 
-    printf("\n");
-}*/
+    // Average out results
+    *avgWait /= numProcs;
+    *avgTurnaround /= numProcs;
 
+    return TRUE;
+}
+
+
+void metricsProcessTable(Process** procs, int numSims, int numProcs) {
+    double wait, turnaround; // Vars to store metrics
+    
+    // Print header columns;
+    printf("\n+--------+---------+---------+\n");
+
+    // Print RR Metrics
+    for(int i = 0; i < numSims - 1; i++) {
+        // print rr header
+        printf("|" ASC_BOLD ASC_CYAN_FG "  RR %d  " ASC_RESET "|", (i + 1) * 2);
+
+        calculateMetrics(procs[i], numProcs, &wait, &turnaround); // Calculate sim metrics
+
+        printf(ASC_BOLD " %07.4f " ASC_RESET "|", wait);
+        printf(ASC_BOLD " %07.4f " ASC_RESET "|", turnaround);
+
+        printf("\n+--------+---------+---------+\n");
+
+    }
+}
 
 
 void execProcessTable(Process*** procs, int* completionTimes, int numProcs) {
@@ -120,11 +128,11 @@ void execProcessTable(Process*** procs, int* completionTimes, int numProcs) {
     
     printf("\n|" ASC_BOLD ASC_GREEN_FG "%-*s" ASC_RESET "|", TIME_COL_WIDTH - 1, " Time "); // Time header
 
-    for(int i = 0; i < numProcs; i++) // Print RR Headers
+    for(int i = 0; i < numProcs - 1; i++) // Print RR Headers
         printf(ASC_BOLD ASC_GREEN_FG "  RR %d  " ASC_RESET "|", (i + 1) * 2); 
 
     // Print SJF Header
-
+    printf(ASC_BOLD ASC_GREEN_FG "  SJF   " ASC_RESET "|");
 
     // Print header bottom border
     printf("\n+");
@@ -147,17 +155,7 @@ void execProcessTable(Process*** procs, int* completionTimes, int numProcs) {
             if(time < completionTimes[i]) { // Iterate each sim at time unit
                 if(procs[i][time]) { // Process executing
                     process = procs[i][time]->processId;
-
-                    // Assign color
-                    switch (process % PROC_COLORS) {
-                        case 0: color = ASC_CYAN_BG; break;
-                        case 1: color = ASC_BLUE_BG; break;
-                        case 2: color = ASC_GREEN_BG; break;
-                        case 3: color = ASC_MAGENTA_BG; break;
-                        case 4: color = ASC_RED_BG; break;
-                        case 5: color = ASC_YELLOW_BG; break;
-                        default: color = ASC_RESET; break;
-                    }
+                    color = cellColor(process); // Assign color
                 }
             } else if(time == completionTimes[i]) { // Sim ccompleted
                 numFinished++;
@@ -176,9 +174,12 @@ void execProcessTable(Process*** procs, int* completionTimes, int numProcs) {
         printf("+");
         printf("%-*s+", TIME_COL_WIDTH, "------"); // Time col border
 
-        for(int i = 0; i < numProcs; i++) // Sim col borders
-            printf("%-*s+", COL_WIDTH, "--------");
-        
+        for(int i = 0; i < numProcs; i++) {// Sim col borders
+            if(procs[i][time] && procs[i][time + 1] && procs[i][time]->processId == procs[i][time + 1]->processId)
+                printf("%s%-*s" ASC_RESET "+", cellColor(procs[i][time]->processId), COL_WIDTH, " ");
+            else
+                printf("%-*s+", COL_WIDTH, "--------");
+        }
         printf("\n");
         time++; // Increment time
     }

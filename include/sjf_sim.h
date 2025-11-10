@@ -3,6 +3,6 @@
 
 #include "process.h"
 
-void sjfSimulate(Process procs[], int numProcs);
+Process** sjfSimulate(Process procs[], int numProcs, int* totalTime);
 
 #endif

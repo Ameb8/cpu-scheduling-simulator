@@ -9,6 +9,7 @@
 
 #define TIME_STEP 1
 #define NUM_PROCS 4
+#define OUTPUT_SIZE_INIT 50
 
 #define PROC_RES_LBL "\n\nFinal Scheduling Results:\n\n"
 
@@ -17,7 +18,12 @@ void processPrintBodyTab(Process* p) {
 }
 
 
-void sjfSimulate(Process procs[], int numProcs) {
+Process** sjfSimulate(Process procs[], int numProcs, int* totalTime) {
+    // Declare array to hold results
+    size_t resultsSize = OUTPUT_SIZE_INIT;
+    Process** results = malloc(resultsSize* sizeof(Process*));
+    
+
     // Ensure process array is sorted by arrival time
     processSortArrival(procs, numProcs);
 
@@ -62,8 +68,13 @@ void sjfSimulate(Process procs[], int numProcs) {
         if(currentExec) processQueuePush(readyQueue, currentExec);
         currentExec = processQueuePop(readyQueue);
 
+
+        results[time] = currentExec;
         time += TIME_STEP; // Increment time
     }
+
+    *totalTime = time;
+    return results;
 }
 
 

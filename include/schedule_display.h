@@ -39,6 +39,8 @@ void processPrintHeader(const char* linePrefix);
 void processPrintBody(const Process* p, const char* linePrefix);
 void processPrint(const Process *p, const char* linePrefix);
 void execProcessPrint(const Process* p);
+void metricsProcessTable(Process** procs, int numSims, int numProcs);
 void execProcessTable(Process*** procs, int* completionTimes, int numProcs);
+char calculateMetrics(Process* procs, int numProcs, double* avgWait, double* avgTurnaround);
  
 #endif

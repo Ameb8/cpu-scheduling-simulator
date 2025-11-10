@@ -9,7 +9,7 @@
 
 
 #define NUM_PROCS 4
-#define QUANTUMS {4, 6, 8, 2}
+#define QUANTUMS {2, 4, 6, 8}
 #define NUM_QUANTUMS 4
 #define NUM_SIMS (NUM_QUANTUMS + 1)
 
@@ -25,29 +25,38 @@ int main() {
 
     const int rrQuantums[] = QUANTUMS;
 
+    Process metrics[NUM_SIMS][NUM_PROCS] = {0}; // Stores Process metrics of each sim
+
+    // Create copy of Processes for each sim to allow for in-place modification
+    for(int i = 0; i < NUM_SIMS; i++)
+        memcpy(metrics[i], processes, sizeof(Process) * NUM_PROCS);
+
     Process*** results = malloc(NUM_SIMS * sizeof(Process**));
-    int resultSizes[NUM_QUANTUMS] = {0};
+    int resultSizes[NUM_SIMS] = {0};
     //sjfSimulate(processes, NUM_PROCS);
 
     for(int i = 0; i < NUM_QUANTUMS; i++) { // Run RR sims
-        // Create copy of processes to account for in-place modification
-        Process procsCopy[NUM_PROCS];
-        memcpy(procsCopy, processes, sizeof(processes));
-
-        results[i] = rrSimulate(procsCopy, NUM_PROCS, rrQuantums[i], &resultSizes[i]);
+        results[i] = rrSimulate(metrics[i], NUM_PROCS, rrQuantums[i], &resultSizes[i]);
         printf("\n\n\n\n\n BMark w/ QUANTUM = %d completed\n", rrQuantums[i]);
     }
 
-    execProcessTable(results, resultSizes, NUM_QUANTUMS); // Display results
+    // Run SJF simulation
+    results[NUM_QUANTUMS] = sjfSimulate(metrics[NUM_QUANTUMS], NUM_PROCS, &resultSizes[NUM_QUANTUMS]);
+
+    execProcessTable(results, resultSizes, NUM_SIMS); // Display results
+
+    metricsProcessTable(&metrics, NUM_SIMS, NUM_PROCS); // Display metrics
 
     // Free results memory
     for(int i = 0; i < NUM_SIMS; i++) {
         if(results[i]) // Free each row
             free(results[i]);
+
     }
 
     free(results); // Free outer array
 
-
     return 0;
 }
+
+

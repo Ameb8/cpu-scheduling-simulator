@@ -84,3 +84,4 @@ void growProcessArr(Process*** procs, int size, int newSize) {
         free(*procs); // Deallocate old array
     }
 }
+
