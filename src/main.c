@@ -34,18 +34,16 @@ int main() {
     Process*** results = malloc(NUM_SIMS * sizeof(Process**));
     int resultSizes[NUM_SIMS] = {0};
 
-    for(int i = 0; i < NUM_QUANTUMS; i++) { // Run RR sims
+    for(int i = 0; i < NUM_QUANTUMS; i++) // Run RR sims
         results[i] = rrSimulate(metrics[i], NUM_PROCS, rrQuantums[i], &resultSizes[i]);
-        printf("\n\n\n\n\n BMark w/ QUANTUM = %d completed\n", rrQuantums[i]);
-    }
 
     // Run SJF simulation
     results[NUM_QUANTUMS] = sjfSimulate(metrics[NUM_QUANTUMS], NUM_PROCS, &resultSizes[NUM_QUANTUMS]);
 
     // DEBUG ********
-    printf("\n\n\nSJF RESULTS:\n");
-    for(int i = 0; i < NUM_PROCS; i++)
-        processPrint(&results[NUM_QUANTUMS][i], "\t");
+    //printf("\n\n\nSJF RESULTS:\n");
+    //for(int i = 0; i < NUM_PROCS; i++)
+        //processPrint(&results[NUM_QUANTUMS][i], "\t");
     // END DEBUG ***
 
     execProcessTable(results, resultSizes, NUM_SIMS); // Display results

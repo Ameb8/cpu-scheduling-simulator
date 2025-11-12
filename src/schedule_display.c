@@ -82,8 +82,8 @@ BOOL calculateMetrics(Process* procs, int numProcs, double* avgWait, double* avg
         *avgTurnaround += procs[i].turnaroundTime;
 
         // DEBUG *******
-        printf("\nProcess:");
-        processPrint(&procs[i], "\t");
+        //printf("\nProcess:");
+        //processPrint(&procs[i], "\t");
 
     }
 
@@ -95,7 +95,7 @@ BOOL calculateMetrics(Process* procs, int numProcs, double* avgWait, double* avg
 }
 
 
-void metricsProcessTable(Process procs[][NUM_SIMS], int numSims, int numProcs) {
+void metricsProcessTable(Process procs[][NUM_PROCS], int numSims, int numProcs) {
     double wait, turnaround; // Vars to store metrics
     const char* simHeaders[] = SIM_TABLE_HEADERS;
 

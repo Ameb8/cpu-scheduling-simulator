@@ -4,7 +4,7 @@
 
 #include "process.h"
 
-#define NUM_SIMS 5
+#define NUM_PROCS 4
 
 #define ASC_RESET "\x1b[0m"
 #define ASC_BOLD "\x1b[1m"
@@ -40,7 +40,7 @@ void processPrintHeader(const char* linePrefix);
 void processPrintBody(const Process* p, const char* linePrefix);
 void processPrint(const Process *p, const char* linePrefix);
 void execProcessPrint(const Process* p);
-void metricsProcessTable(Process procs[][NUM_SIMS], int numSims, int numProcs);
+void metricsProcessTable(Process procs[][NUM_PROCS], int numSims, int numProcs);
 void execProcessTable(Process*** procs, int* completionTimes, int numProcs);
 char calculateMetrics(Process* procs, int numProcs, double* avgWait, double* avgTurnaround);
  

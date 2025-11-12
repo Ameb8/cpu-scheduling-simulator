@@ -34,16 +34,6 @@ Process** sjfSimulate(Process procs[], int numProcs, int* totalTime) {
 
     // Loop until no process execution, no queued CPU bursts, and no pending arrivals
     while(nextProc < numProcs || currentExec || processQueueSize(readyQueue)) {
-        /*printf(TIME_HEADER, time); // Print time unit header
-        
-        if(currentExec) // Print currently executing process
-            execProcessPrint(currentExec);
-
-        // Print ready queue in order of remaining CPU time
-        printf(READY_QUEUE_HEADER);
-        processPrintHeader((LINE_START "\t"));
-        processQueueMap(readyQueue, processPrintBodyTab);
-*/
         // Update wait and turnaround time for processes in ready queue:
         processQueueMap(readyQueue, processWait);
 
@@ -52,17 +42,10 @@ Process** sjfSimulate(Process procs[], int numProcs, int* totalTime) {
 
         if(currentExec && currentExec->remainingTime == 0) // Process completed execution
             currentExec = NULL;
-/*
-        if(nextProc < numProcs && procs[nextProc].arrivalTime == time) {
-            printf(ARRIVE_HEADER);
-            processPrintHeader(LINE_START "\t");
-        }
-*/
+
         // Handle arriving processes
-        while(nextProc < numProcs && procs[nextProc].arrivalTime == time) {
-            processPrintBody(&procs[nextProc], (LINE_START "\t"));
+        while(nextProc < numProcs && procs[nextProc].arrivalTime == time)
             processQueuePush(readyQueue, &procs[nextProc++]);
-        }
 
         // Preemptively update currently executing process
         if(currentExec) processQueuePush(readyQueue, currentExec);

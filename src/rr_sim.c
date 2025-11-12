@@ -57,9 +57,9 @@ Process** rrSimulate(Process proc[], int numProcs, int quantum, int* totalTime) 
 
         processDequeueMap(readyQueue, processWait); // Update waiting processes
     
-        if(currentExec)
-            printf("\n\n At time %d:\t\tPROC[%d]", time, currentExec->processId);
-        printf("\t\tWAIT[%zu]", processDequeueSize(readyQueue));
+        //if(currentExec)
+            //printf("\n\n At time %d:\t\tPROC[%d]", time, currentExec->processId);
+        //printf("\t\tWAIT[%zu]", processDequeueSize(readyQueue));
 
         time++; // Move time forward
     }

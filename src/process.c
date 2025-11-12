@@ -25,7 +25,6 @@ Process processInit(int arrivalTime, int burstTime) {
         burstTime, 
         burstTime,
         0,
-        0, 
         0
     };
 }
