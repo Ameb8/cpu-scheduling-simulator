@@ -24,11 +24,8 @@ Process** rrSimulate(Process proc[], int numProcs, int quantum, int* totalTime) 
     // Loop by 1 time unit until all process complete execution
     while(procIdx < numProcs || processDequeueSize(readyQueue) > 0 || currentExec) {
         // Append arriving processes to queue
-        while(procIdx < numProcs && proc[procIdx].arrivalTime == time) {
-            printf("\nProcess %d Arriving\n", proc[procIdx].processId); // DEBUG *******
-
+        while(procIdx < numProcs && proc[procIdx].arrivalTime == time)
             processDequeueAppend(readyQueue, &proc[procIdx++]);
-        }
 
         // Process finished execution
         if(currentExec && currentExec->remainingTime == 0) {

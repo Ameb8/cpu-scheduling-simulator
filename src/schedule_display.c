@@ -9,9 +9,12 @@
 #define PROC_TABLE_DIV "+------------+--------------+------------+----------------+--------------+-----------------+"
 #define PROC_COLORS 6
 
+
 #define BOOL char
 #define TRUE 1
 #define FALSE 0
+
+#define SIM_TABLE_HEADERS {"RR 2", "RR 4", "RR 6", "RR 8", "SJF "}
 
 
 void processPrintHeader(const char* linePrefix) {
@@ -77,6 +80,11 @@ BOOL calculateMetrics(Process* procs, int numProcs, double* avgWait, double* avg
     for(int i = 0; i < numProcs; i++) {
         *avgWait += procs[i].waitingTime;
         *avgTurnaround += procs[i].turnaroundTime;
+
+        // DEBUG *******
+        printf("\nProcess:");
+        processPrint(&procs[i], "\t");
+
     }
 
     // Average out results
@@ -87,23 +95,27 @@ BOOL calculateMetrics(Process* procs, int numProcs, double* avgWait, double* avg
 }
 
 
-void metricsProcessTable(Process** procs, int numSims, int numProcs) {
+void metricsProcessTable(Process procs[][NUM_SIMS], int numSims, int numProcs) {
     double wait, turnaround; // Vars to store metrics
-    
+    const char* simHeaders[] = SIM_TABLE_HEADERS;
+
+    printf("\n+--------+---------+------------+\n");
+    printf("|        | " ASC_GREEN_FG ASC_BOLD " Wait  " ASC_RESET " |" ASC_GREEN_FG ASC_BOLD " Turnaround " ASC_RESET "|");
+
     // Print header columns;
-    printf("\n+--------+---------+---------+\n");
+    printf("\n+--------+---------+------------+\n");
 
     // Print RR Metrics
-    for(int i = 0; i < numSims - 1; i++) {
+    for(int i = 0; i < numSims; i++) {
         // print rr header
-        printf("|" ASC_BOLD ASC_CYAN_FG "  RR %d  " ASC_RESET "|", (i + 1) * 2);
+        printf("|" ASC_BOLD ASC_CYAN_FG "  %s  " ASC_RESET "|", simHeaders[i]);
 
         calculateMetrics(procs[i], numProcs, &wait, &turnaround); // Calculate sim metrics
 
         printf(ASC_BOLD " %07.4f " ASC_RESET "|", wait);
-        printf(ASC_BOLD " %07.4f " ASC_RESET "|", turnaround);
+        printf(ASC_BOLD "  %07.4f   " ASC_RESET "|", turnaround);
 
-        printf("\n+--------+---------+---------+\n");
+        printf("\n+--------+---------+------------+\n");
 
     }
 }
@@ -157,7 +169,7 @@ void execProcessTable(Process*** procs, int* completionTimes, int numProcs) {
                     process = procs[i][time]->processId;
                     color = cellColor(process); // Assign color
                 }
-            } else if(time == completionTimes[i]) { // Sim ccompleted
+            } else if(time == completionTimes[i]) { // Sim completed
                 numFinished++;
             }
 
@@ -185,4 +197,5 @@ void execProcessTable(Process*** procs, int* completionTimes, int numProcs) {
     }
 
     printf("\n");
+
 }

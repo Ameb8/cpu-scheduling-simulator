@@ -15,7 +15,6 @@ typedef struct {
     int remainingTime;
     int waitingTime;
     int turnaroundTime;
-    int lastAck;
 } Process; */
 
 
@@ -48,7 +47,6 @@ int processExec(Process* p, int time, int curTime) {
 
     p->turnaroundTime += execTime;    
     p->remainingTime -= execTime;
-    p->lastAck = curTime + execTime;
     
     return execTime;
 }
@@ -57,12 +55,6 @@ int processExec(Process* p, int time, int curTime) {
 void processWait(Process* p) {
     p->waitingTime++;
     p->turnaroundTime++;
-}
-
-
-void processResumeExec(Process* p, int curTime) {
-    p->waitingTime += curTime - p->lastAck;
-    p->turnaroundTime += curTime - p->lastAck;
 }
 
 

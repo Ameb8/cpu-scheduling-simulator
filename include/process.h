@@ -8,7 +8,6 @@ typedef struct {
     int remainingTime;
     int waitingTime;
     int turnaroundTime;
-    int lastAck;
 } Process;
 
 Process processInit(int arrivalTime, int burstTime);
