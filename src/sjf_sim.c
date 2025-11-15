@@ -23,7 +23,6 @@ Process** sjfSimulate(Process procs[], int numProcs, int* totalTime) {
     size_t resultsSize = OUTPUT_SIZE_INIT;
     Process** results = malloc(resultsSize* sizeof(Process*));
     
-
     // Ensure process array is sorted by arrival time
     processSortArrival(procs, numProcs);
 

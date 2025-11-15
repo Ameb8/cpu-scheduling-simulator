@@ -16,6 +16,8 @@
 
 #define SIM_TABLE_HEADERS {"RR 2", "RR 4", "RR 6", "RR 8", "SJF "}
 
+#define METRICS_TABLE_SEP "\n+--------+---------+------------+\n"
+
 
 void processPrintHeader(const char* linePrefix) {
     printf("%s" PROC_TABLE_DIV "\n", linePrefix);
@@ -41,10 +43,22 @@ void processPrintBody(const Process* p, const char* linePrefix) {
 
 
 void processPrint(const Process* p, const char* linePrefix) {
-    if (p == NULL) return;
+    if(!p) // Validate inputs 
+        return;
 
     processPrintHeader(linePrefix);
     processPrintBody(p, linePrefix);
+}
+
+void processPrintTable(const Process* procs, size_t numProcs, const char* linePrefix) {
+    if(!procs || numProcs < 1) // Validate inputs
+        return;
+
+    processPrintHeader(linePrefix); // Print table header
+    
+    for(int i = 0; i < numProcs; i++) // Print Process Items
+        processPrintBody(&procs[i], linePrefix); 
+
 }
 
 void execProcessPrint(const Process* p) {
@@ -80,11 +94,6 @@ BOOL calculateMetrics(Process* procs, int numProcs, double* avgWait, double* avg
     for(int i = 0; i < numProcs; i++) {
         *avgWait += procs[i].waitingTime;
         *avgTurnaround += procs[i].turnaroundTime;
-
-        // DEBUG *******
-        //printf("\nProcess:");
-        //processPrint(&procs[i], "\t");
-
     }
 
     // Average out results
@@ -99,11 +108,11 @@ void metricsProcessTable(Process procs[][NUM_PROCS], int numSims, int numProcs) 
     double wait, turnaround; // Vars to store metrics
     const char* simHeaders[] = SIM_TABLE_HEADERS;
 
-    printf("\n+--------+---------+------------+\n");
+    printf(METRICS_TABLE_SEP);
     printf("|        | " ASC_GREEN_FG ASC_BOLD " Wait  " ASC_RESET " |" ASC_GREEN_FG ASC_BOLD " Turnaround " ASC_RESET "|");
 
     // Print header columns;
-    printf("\n+--------+---------+------------+\n");
+    printf(METRICS_TABLE_SEP);
 
     // Print RR Metrics
     for(int i = 0; i < numSims; i++) {
@@ -115,7 +124,7 @@ void metricsProcessTable(Process procs[][NUM_PROCS], int numSims, int numProcs) 
         printf(ASC_BOLD " %07.4f " ASC_RESET "|", wait);
         printf(ASC_BOLD "  %07.4f   " ASC_RESET "|", turnaround);
 
-        printf("\n+--------+---------+------------+\n");
+        printf(METRICS_TABLE_SEP);
 
     }
 }
@@ -189,9 +198,10 @@ void execProcessTable(Process*** procs, int* completionTimes, int numProcs) {
         for(int i = 0; i < numProcs; i++) {// Sim col borders
             if(procs[i][time] && procs[i][time + 1] && procs[i][time]->processId == procs[i][time + 1]->processId)
                 printf("%s%-*s" ASC_RESET "+", cellColor(procs[i][time]->processId), COL_WIDTH, " ");
-            else
+            else 
                 printf("%-*s+", COL_WIDTH, "--------");
         }
+
         printf("\n");
         time++; // Increment time
     }
