@@ -48,19 +48,11 @@ Process** rrSimulate(Process proc[], int numProcs, int quantum, int* totalTime) 
             execTime++;
         }
 
-        // Increase results array if necessary
-        if(time >= resultsSize)
+        if(time >= resultsSize) // Increase results array if necessary
             growProcessArr(&results, resultsSize, resultsSize * 2);
         
-        // Write to results
-        results[time] = currentExec;
-
+        results[time] = currentExec; // Write to results
         processDequeueMap(readyQueue, processWait); // Update waiting processes
-    
-        //if(currentExec)
-            //printf("\n\n At time %d:\t\tPROC[%d]", time, currentExec->processId);
-        //printf("\t\tWAIT[%zu]", processDequeueSize(readyQueue));
-
         time++; // Move time forward
     }
 

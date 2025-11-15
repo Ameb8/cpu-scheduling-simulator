@@ -11,11 +11,6 @@
 #define NUM_PROCS 4
 #define OUTPUT_SIZE_INIT 50
 
-#define PROC_RES_LBL "\n\nFinal Scheduling Results:\n\n"
-
-void processPrintBodyTab(Process* p) {
-    processPrintBody(p, (LINE_START "\t")); // Print process
-}
 
 
 Process** sjfSimulate(Process procs[], int numProcs, int* totalTime) {

@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <limits.h>
 
-#include "../include/fmt.h"
 #include "../include/schedule_display.h"
 
 
@@ -60,12 +59,12 @@ void processPrintTable(const Process* procs, size_t numProcs, const char* linePr
         processPrintBody(&procs[i], linePrefix); 
 
 }
-
+/*
 void execProcessPrint(const Process* p) {
     printf(EXEC_HEADER);
     processPrint(p, (LINE_START "\t"));
     printf(LINE_START "\n" LINE_START "\n" LINE_START);
-}
+}*/
 
 
 static inline char* cellColor(int processId) {
