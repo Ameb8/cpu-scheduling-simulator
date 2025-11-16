@@ -7,17 +7,6 @@
 static int processCount = 0; 
 
 
-/*
-typedef struct {
-    int processId;
-    int arrivalTime;
-    int burstTime;
-    int remainingTime;
-    int waitingTime;
-    int turnaroundTime;
-} Process; */
-
-
 Process processInit(int arrivalTime, int burstTime) {
     return (Process) {
         processCount++, 
